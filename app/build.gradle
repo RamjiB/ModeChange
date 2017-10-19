@@ -31,11 +31,9 @@ dependencies {
     //Recycler view
     compile 'com.android.support:recyclerview-v7:25.3.1'
 
-//    //Google play services place
-//    compile 'com.google.android.gms:play-services-places:11.4.2'
-//
-//    //Google play services location
-//    compile 'com.google.android.gms:play-services-location:11.4.2'
+    //Google play services place
+    compile 'com.google.android.gms:play-services-places:11.0.4'
 
-
+    //Google play services location
+    compile 'com.google.android.gms:play-services-location:11.0.4'
 }

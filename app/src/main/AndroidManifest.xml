@@ -20,8 +20,7 @@
         <!-- Google places API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="Enter you Api Key" />
-
+            android:value="Enter your Api Key here" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

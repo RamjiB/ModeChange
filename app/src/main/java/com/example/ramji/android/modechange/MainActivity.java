@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         mGeofencing = new Geofencing(this,mClient);
+
     }
 
     /**

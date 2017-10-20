@@ -29,7 +29,7 @@ public class Geofencing implements ResultCallback {
 
     //Constants
     private static final long GEOFENCE_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
-    private static final float GEOFENCE_RADIUS = 50; // 50 metres
+    private static final float GEOFENCE_RADIUS = 30; // 30 metres
 
     private List<Geofence> mGeofenceList;
     private PendingIntent mGeofencePendingIntent;

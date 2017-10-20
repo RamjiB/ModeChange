@@ -1,12 +1,15 @@
 package com.example.ramji.android.modechange;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -225,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
-        //Initiliasing location permission checkbox
+        //Initialising location permission checkbox
 
         locationPermissionCB = (CheckBox) findViewById(R.id.location_permission_checkbox);
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
@@ -236,6 +239,18 @@ public class MainActivity extends AppCompatActivity implements
             locationPermissionCB.setEnabled(false);
         }
 
+        //Initialising ringer permission checkbox
+        CheckBox ringerPermissions = (CheckBox) findViewById(R.id.ringermode_permission_checkbox);
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //Check if the API Supports such permission change and check if permission is granted
+
+        if (Build.VERSION.SDK_INT >= 24 && !nm.isNotificationPolicyAccessGranted()){
+            ringerPermissions.setChecked(false);
+        }else{
+            ringerPermissions.setChecked(true);
+            ringerPermissions.setEnabled(false);
+        }
+
     }
 
     public void onLocationPermissionClicked(View view) {
@@ -243,5 +258,11 @@ public class MainActivity extends AppCompatActivity implements
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSIONS_REQUEST_FINE_LOCATION);
 
+    }
+
+    public void onRingerPermissionClicked(View view) {
+
+        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+        startActivity(intent);
     }
 }

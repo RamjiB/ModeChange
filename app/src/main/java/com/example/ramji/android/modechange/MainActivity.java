@@ -3,6 +3,7 @@ package com.example.ramji.android.modechange;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.ramji.android.modechange.provider.PlaceContract;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements
     private CheckBox locationPermissionCB;
     private Button addButton;
     private GoogleApiClient mClient;
+    private Boolean mIsEnabled;
+    private Geofencing mGeofencing;
 
     /**
      * Called when the activity is starting
@@ -67,6 +72,22 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter = new PlaceListAdapter(this,null);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Initialize the switch state and Handle enable/disable switch change
+        Switch onOffSwitch = (Switch) findViewById(R.id.enable_switch);
+        mIsEnabled = getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.setting_enabled),false);
+        onOffSwitch.setChecked(mIsEnabled);
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                editor.putBoolean(getString(R.string.setting_enabled),isChecked);
+                mIsEnabled = isChecked;
+                editor.commit();
+                if (isChecked) mGeofencing.registerAllGeofence();
+                else mGeofencing.unRegisterAllGeofence();
+            }
+        });
+
         //Creating GoogleApiClient with the location services API and GEO_DATA_API
 
         mClient = new GoogleApiClient.Builder(this)
@@ -76,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this,this)
                 .build();
+
+        mGeofencing = new Geofencing(this,mClient);
     }
 
     /**
@@ -132,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements
         //Modify the adapter to use placebuffer as the data source
         PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mClient,
                 guids.toArray(new String[guids.size()]));
-        Log.i(TAG,"placeResult2");
         placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
             @Override
             public void onResult(@NonNull PlaceBuffer places) {

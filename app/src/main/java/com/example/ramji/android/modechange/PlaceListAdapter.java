@@ -36,9 +36,19 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
 
     }
 
+    /**
+     * Binds the data from a particular position in the cursor to the corresponding view holder
+     *
+     * @param holder   The PlaceViewHolder instance corresponding to the required position
+     * @param position The current position that needs to be loaded with data
+     */
+
     @Override
     public void onBindViewHolder(PlaceListAdapter.PlaceViewHolder holder, int position) {
-
+        String placeName = mPlaces.get(position).getName().toString();
+        String placeAddress = mPlaces.get(position).getAddress().toString();
+        holder.nameTextView.setText(placeName);
+        holder.addressTextView.setText(placeAddress);
     }
 
     @Override

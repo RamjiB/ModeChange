@@ -20,7 +20,8 @@
         <!-- Google places API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="Enter your Api Key here" />
+            android:value="AIzaSyCwJC2II5irM-1-0LWVztcs4GOxGdSYLro" />
+
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -34,6 +35,8 @@
             android:name="com.example.ramji.android.modechange.provider.PlaceContentProvider"
             android:authorities="com.example.ramji.android.modechange"
             android:exported="false"/>
+
+        <receiver android:name=".GeofenceBroadcastReceiver" />
     </application>
 
 </manifest>
